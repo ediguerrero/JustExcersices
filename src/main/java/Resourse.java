@@ -1,3 +1,8 @@
+import kim_exersice.ItemsA;
+import kim_exersice.ItemsB;
+import kim_exersice.ItemsEnum;
+import kim_exersice.Ivalidator;
+
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Function;
@@ -223,7 +228,36 @@ public class Resourse {
         Arrays.sort(x);
         //System.out.println(x[x.length - 1]);
     }
+    public static Map<ItemsEnum, Integer> addItems(List<ItemsEnum> items) {
+        Map<ItemsEnum, Integer> amount = new HashMap<>();
+        for (ItemsEnum x : items) {
+            if (amount.get(x) == null) {
+                amount.put(x, 1);
+            } else {
+                amount.put(x, amount.get(x) + 1);
+            }
+        }
 
+        return amount;
+    }
+
+    public static double validate(Map<ItemsEnum, Integer> items) {
+        double amountTotal = 0;
+        for (Ivalidator valid : fillValidators()) {
+            amountTotal += valid.validate(items);
+        }
+        System.out.println(amountTotal);
+        return amountTotal;
+    }
+
+    static List<Ivalidator> fillValidators() {
+        List<Ivalidator> validators = new ArrayList<>();
+        validators.add(new ItemsA());
+        validators.add(new ItemsB());
+
+
+        return validators;
+    }
 
 }
 
