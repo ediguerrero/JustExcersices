@@ -145,11 +145,41 @@ public class Resourse {
         //List c = Arrays.asList(x);
         //maxTrailing(c);
         //maxTrailing2(c);
-        System.out.println(repetidos(Arrays.stream(x).boxed().collect(Collectors.toList())));
-        System.out.println(buscarRecursivo2(x, 0, 1,1));
+
+        System.out.print(palindrome("Dabale arroz a la zorra el abad"));
+       // System.out.println(repetidos(Arrays.stream(x).boxed().collect(Collectors.toList())));
+    //    System.out.println(buscarRecursivo2(x, 0, 1,1));
     }
 
+    //separa las palabras por caracteres especiales o espacios y las pone en camel case y las pega todas, la primera palabra
+    //la deja en minuscula
+    //cats AND*Dogs-Are Awesome -> catsAndDogsAreAwesome
+    //a b c d-e-f%g -> aBCDEFG
+    //BOB loves-coding -> bonLovesCoding
+    public static String StringChallenge1(String str) {
+        String xp = str.replaceAll("[^a-zA-Z0-9]", " ");
+        String[] arr = xp.split(" ");
+        StringBuffer sb = new StringBuffer();
 
+        for(int i =0 ; i < arr.length; i++){
+            sb.append(Character.toUpperCase(arr[i].charAt(0)))
+                    .append(arr[i].substring(1).toLowerCase());
+
+        }
+        String one = sb.toString().trim();
+        one = one.replaceFirst(one.substring(0,1), one.substring(0,1).toLowerCase());
+        return one;
+    }
+
+    //palindrome eficiente
+    public static String palindrome(String str) {
+        // code goes here
+        String newMysz = str.replace(" ","");
+        StringBuilder x=new StringBuilder();
+        x.append(newMysz);
+        boolean isit = newMysz.equals(x.reverse().toString());
+        return  isit?"true": "false";
+    }
     public static void maxTrailing(List<Integer> levels) {        // Write your code here
 
         int aux2 = 0;
@@ -178,6 +208,29 @@ public class Resourse {
         Object[] x = rest.toArray();
         Arrays.sort(x);
        // System.out.println(x[x.length - 1]);
+    }
+//buscar la primera letra que no se repite agettkgaeee retorna k , abcdef retorna a , hello world hi hey retorns w
+    public static String SearchingChallenge(String str) {
+        String newMysz = str.replace(" ", "");
+        char[] one = newMysz.toCharArray();
+        Map<Character, Integer> x = new LinkedHashMap<Character, Integer>();
+        for (Character y : one) {
+            if (x.get(y) == null) {
+                x.put(y, 1);
+            } else {
+                Integer c = x.get(y);
+                x.put(y, 1 + c);
+            }
+        }
+        for (Map.Entry<Character, Integer> entry : x.entrySet()) {
+
+            if (!(entry.getValue() >= 2)) {
+                newMysz = "" + entry.getKey();
+                break;
+            }
+
+        }
+        return newMysz;
     }
 
     public static int buscarRecursivo(int A[], int clave, int n, int i){
@@ -286,6 +339,8 @@ class Persona {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+
 
 
 }
