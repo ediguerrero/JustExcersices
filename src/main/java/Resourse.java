@@ -3,7 +3,14 @@ import kim_exersice.ItemsB;
 import kim_exersice.ItemsEnum;
 import kim_exersice.Ivalidator;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -171,6 +178,84 @@ public class Resourse {
         return one;
     }
 
+//In the Java file, write a program to perform a GET request on the route
+// https://coderbyte.com/api/challenges/json/rest-get-simple and then print
+// to the console the hobbies property in the following format: ITEM1, ITEM2,
+
+    //example running, painting
+    public void another(){
+        System.setProperty("http.agent", "Chrome");
+        try {
+
+            StringBuilder finalWord = new StringBuilder();
+            URL url = new URL("https://coderbyte.com/api/challenges/json/rest-get-simple");
+            try {
+                URLConnection connection = url.openConnection();
+                InputStream inputStream = connection.getInputStream();
+
+                String [] result =
+                        new BufferedReader(new InputStreamReader(inputStream)).readLine().split("hobbies");
+
+                String [] words =
+                        result[1].split(",");
+
+                for(int i = 0; i< words.length; i++){
+
+                    finalWord.append( words[i].replaceAll("[^a-zA-Z0-9]", "").trim()+", ");
+                }
+                System.out.println(finalWord.delete(finalWord.length()-2,finalWord.length()));
+
+            } catch (IOException ioEx) {
+                System.out.println(ioEx);
+            }
+        } catch (MalformedURLException malEx) {
+            System.out.println(malEx);
+        }
+    }
+//In the Java file, write a program to perform a GET request on the route https://coderbyte.com/api/challenges/json/age-counting
+// which contains a data key and the value is a string which contains items in the format: key=STRING,
+// age=INTEGER. Your goal is to count how many items exist that have an age equal
+// to or greater than 50, and print this final value.
+    //Example Input
+//{"data":"key=IAfpK, age=58, key=WNVdi, age=64, key=jp9zt, age=47"}
+//
+//Example Output
+//2
+    public void another2(){
+
+        System.setProperty("http.agent", "Chrome");
+        try {
+            URL url = new URL("https://coderbyte.com/api/challenges/json/age-counting");
+            try {
+                URLConnection connection = url.openConnection();
+                InputStream inputStream = connection.getInputStream();
+
+                String []result = new BufferedReader(new InputStreamReader(inputStream)).readLine().split("key=");
+
+                Map <String , Integer> xp = new HashMap<>();
+
+                result[result.length-1] =   result[result.length-1].split(",")[0]+","+result[result.length-1].split(",")[1].replaceAll("[^a-zA-Z0-9]","").replace("age","age=");
+
+                for(int i =1 ; i<result.length; i++){
+                    String [] values = result[i].split(",");
+                    String key1= values[0];
+                    Integer value2 = Integer.parseInt( values[1].split("=")[1].trim());
+                    xp.put(key1, value2);
+
+                }
+
+                List <Integer> amount = xp.values().stream().filter(x->x>=50).collect(Collectors.toList());
+                System.out.println(amount.size());
+
+            } catch (IOException ioEx) {
+                System.out.println(ioEx);
+            }
+        } catch (MalformedURLException malEx) {
+            System.out.println(malEx);
+        }
+    }
+
+
     //palindrome eficiente
     public static String palindrome(String str) {
         // code goes here
@@ -179,6 +264,43 @@ public class Resourse {
         x.append(newMysz);
         boolean isit = newMysz.equals(x.reverse().toString());
         return  isit?"true": "false";
+    }
+
+
+
+   //Have the function LongestWord(sen) take the sen parameter being passed and return
+    // the longest word in the string. If there are two or more words that are the same
+    // length, return the first word from the string with that length. Ignore punctuation and
+    // assume sen will not be empty. Words may also contain numbers, for example "Hello world123 567"
+
+   //Input: "fun&!! time"
+    //Output: time
+    //Input: "I love dogs"
+    //Output: love
+
+    public static String LongestWord(String sen) {
+ //el rejex deja las letras y los numeros y quita lo demas
+        String xp = sen.replaceAll("[^a-zA-Z0-9]"," ");
+        String [] ar = xp.split(" ");
+        Map <String , Integer> amounts = new LinkedHashMap<>();
+        for(String word: ar){
+            if(amounts.get(word)==null){
+                amounts.put(word, word.length());
+            }
+        }
+
+        Integer max = Collections.max(amounts.values());
+        for (Map.Entry<String,Integer> entry: amounts.entrySet()){
+            Integer value = entry.getValue();
+            if(value!=null && max == value){
+                sen = entry.getKey();
+                break;
+            }
+
+        }
+
+        // code goes here
+        return sen;
     }
     public static void maxTrailing(List<Integer> levels) {        // Write your code here
 
